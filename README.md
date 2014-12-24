@@ -1,4 +1,6 @@
-notes
-=====
+# planet notes, links and more
 
-planet notes, links and more
+
+- [Planets][PLANETS.md]
+- [Alternatives](ALTERNATIVES.md)
+
