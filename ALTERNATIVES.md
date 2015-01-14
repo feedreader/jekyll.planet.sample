@@ -24,8 +24,11 @@ Planet Venus by Sam Ruby [(Site)](https://github.com/rubys/venus) - cleaned up P
 
 ## Feed Parsers
 
+## Ruby
 
-### Ruby
+- [`syndication`](http://syndication.rubyforge.org) [(Source)](https://github.com/lpar/syndication) - by Mathew (aka lpar);  RSS 1.0, 2.0, Atom, and understands namespaces; optional support for Dublin Core, iTunes/podcast feeds, and RSS 1.0 Syndication and Content modules
+- [`simple-rss`](http://rubyforge.org/projects/simple-rss)
+- [`feedtools`](http://rubyforge.org/projects/feedtools)
 
 
 ### Python
