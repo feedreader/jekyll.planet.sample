@@ -1,12 +1,20 @@
 ### your site title here
 
-title: planet.rb Sample Site - Jekyll Edition
+title:       "planet.rb Sample Site - Jekyll Edition"
+description: "Built with the planet.rb quick starter script that (auto-)adds articles & blog posts to your (static) website via feeds (and planet pluto)"
+
+
+
+
+github_username: feedreader
 
 
 ### let's use the minima theme (see https://github.com/jekyll/minima)
-
 theme: minima
 
+gems:
+- jekyll-avatar
+- jekyll-feed
 
 ### exclude the instructions / write-up in the README.md
 
