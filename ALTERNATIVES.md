@@ -8,15 +8,15 @@ Feed Aggregators • Feed Parsers • Feed Filters / Sanitizers
 
 `planet.rb` by Akira Yamada [(Site)](http://planet.rubyforge.org)
 
-`planet.rb` by Pablo Astigarraga [(Site)](https://github.com/pote/planet.rb)  - used with jekyll/octopress site generator
+`planet.rb` by Pablo Astigarraga [(Source)](https://github.com/pote/planet.rb)  - used with jekyll/octopress site generator
 
-Planet Mars by Sam Ruby [(Site)](https://github.com/rubys/mars) -  first draft of cleaned up Planet Planet code; last change in 2008
+Planet Mars by Sam Ruby [(Source)](https://github.com/rubys/mars) -  first draft of cleaned up Planet Planet code; last change in 2008
 
 **Python**
 
 Planet Planet by Scott James Remnant and Jeff Waugh [(Site)](http://www.planetplanet.org)  - uses Mark Pilgrim's universal feed parser (RDF, RSS and Atom) and Tomas Styblo's templating engine; last release version 2.0 in 2006
 
-Planet Venus by Sam Ruby [(Site)](https://github.com/rubys/venus) - cleaned up Planet Planet code; last change in 2010
+Planet Venus by Sam Ruby [(Source)](https://github.com/rubys/venus) - cleaned up Planet Planet code; last change in 2010
 
 **Node.js**
 
@@ -40,6 +40,5 @@ Planet Venus by Sam Ruby [(Site)](https://github.com/rubys/venus) - cleaned up P
 
 **Node.js**
 
-- [node-resanitize](https://github.com/danmactough/node-resanitize)
-
+- `node-resanitize` [(Source)](https://github.com/danmactough/node-resanitize)
 
