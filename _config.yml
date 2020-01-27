@@ -3,9 +3,7 @@
 title:       "planet.rb Sample Site - Jekyll Edition"
 description: "Built with the planet.rb quick starter script that (auto-)adds articles & blog posts to your (static) website via feeds (and planet pluto)"
 
-
-
-
+author: Planet Ruby
 github_username: feedreader
 
 
