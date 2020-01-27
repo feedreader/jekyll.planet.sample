@@ -1,4 +1,4 @@
-See the live version @ [`**feedreader.github.io/jekyll.planet.sample**`](http://feedreader.github.io/jekyll.planet.sample/)
+See the live version @ [**`feedreader.github.io/jekyll.planet.sample`**](http://feedreader.github.io/jekyll.planet.sample/)
 
 
 
@@ -6,5 +6,5 @@ See the live version @ [`**feedreader.github.io/jekyll.planet.sample**`](http://
 
 # planet.rb Sample - Jekyll Edition
 
-Back to the [`planet.rb` quick started script »](https://github.com/feedreader/planet.rb)
+Back to the [`planet.rb` quick starter script »](https://github.com/feedreader/planet.rb)
 
