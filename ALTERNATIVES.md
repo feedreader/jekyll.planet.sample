@@ -18,7 +18,14 @@ Planet Planet by Scott James Remnant and Jeff Waugh [(Site)](http://www.planetpl
 
 Planet Venus by Sam Ruby [(Source)](https://github.com/rubys/venus) - cleaned up Planet Planet code; last change in 2010
 
+**PHP**
+
+[Moon Moon](https://moonmoon.org) by [(Source)](https://github.com/moonmoon/moonmoon) by Maurice Svay et al; uses the SimplePie (feed parser) library
+
+
 **Node.js**
+
+River by Dave Winer
 
 
 
