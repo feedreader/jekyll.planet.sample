@@ -1,5 +1,33 @@
-# Welcome
+---
+title:  Welcome
+layout: default
+---
 
-Sample (static) website built with 
-the [planet.rb quick starter script](https://github.com/feedreader/planet.rb) that (auto-)adds articles & blog posts to your (static) website via feeds (and planet pluto).
+<p>
+Welcome to the sample (static) website built with 
+the <a href="https://github.com/feedreader/planet.rb">planet.rb quick starter script</a>
+that (auto-)adds articles & blog posts to your (static) website via feeds (and planet pluto).
 
+
+
+{% for post in site.posts limit:8 %}
+
+<article class="post">
+
+  <header class="post-header">
+    <p class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</p>
+    <a class="post-link" href="{{ post.url | prepend: site.baseurl }}"><h1 class="post-title">{{ post.title | escape }}</h1></a>
+  </header>
+
+  <div class="post-content">
+    {{ post.content }}
+  </div>
+</article>
+
+{% endfor %}
+
+
+
+<p class="rss-subscribe">
+Subscribe to <a href="{{ "/feed.xml" | relative_url }}">web feed</a>.
+</p>
