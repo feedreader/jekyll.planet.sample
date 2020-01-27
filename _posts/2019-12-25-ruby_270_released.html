@@ -1,0 +1,432 @@
+---
+title:      "Ruby 2.7.0 Released"
+created_at: 2019-12-25 00:00:00 UTC
+author:     Ruby Lang News
+layout:     post
+original_link: "https://www.ruby-lang.org/en/news/2019/12/25/ruby-2-7-0-released/"
+---
+<p>We are pleased to announce the release of Ruby 2.7.0.</p>
+
+<p>It introduces a number of new features and performance improvements,
+most notably:</p>
+
+<ul>
+  <li>Pattern Matching</li>
+  <li>REPL improvement</li>
+  <li>Compaction GC</li>
+  <li>Separation of positional and keyword arguments</li>
+</ul>
+
+<h2>Pattern Matching [Experimental]</h2>
+
+<p>Pattern matching, a widely used feature in functional programming languages,
+is introduced as an experimental feature.
+<a href="https://bugs.ruby-lang.org/issues/14912">[Feature #14912]</a></p>
+
+<p>It can traverse a given object and assign its value if it matches a pattern.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s2">"json"</span>
+
+<span class="n">json</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="no">END</span><span class="sh">
+{
+  "name": "Alice",
+  "age": 30,
+  "children": [{ "name": "Bob", "age": 2 }]
+}
+</span><span class="no">END</span>
+
+<span class="k">case</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="ss">symbolize_names: </span><span class="kp">true</span><span class="p">)</span>
+<span class="k">in</span> <span class="p">{</span><span class="ss">name: </span><span class="s2">"Alice"</span><span class="p">,</span> <span class="ss">children: </span><span class="p">[{</span><span class="ss">name: </span><span class="s2">"Bob"</span><span class="p">,</span> <span class="ss">age: </span><span class="n">age</span><span class="p">}]}</span>
+  <span class="nb">p</span> <span class="n">age</span> <span class="c1">#=&gt; 2</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>For more details, please see
+<a href="https://speakerdeck.com/k_tsj/pattern-matching-new-feature-in-ruby-2-dot-7">Pattern matching - New feature in Ruby 2.7</a>.</p>
+
+<h2>REPL improvement</h2>
+
+<p><code>irb</code>, the bundled interactive environment (REPL; Read-Eval-Print-Loop),
+now supports multi-line editing. It is powered by <code>reline</code>,
+a <code>readline</code>-compatible library implemented in pure Ruby.
+It also provides rdoc integration. In <code>irb</code> you can display the reference
+for a given class, module, or method.
+<a href="https://bugs.ruby-lang.org/issues/14683">[Feature #14683]</a>,
+<a href="https://bugs.ruby-lang.org/issues/14787">[Feature #14787]</a>,
+<a href="https://bugs.ruby-lang.org/issues/14918">[Feature #14918]</a></p>
+
+<p>Besides, source lines shown by <code>Binding#irb</code> and inspect results
+for core-class objects are now colorized.</p>
+
+<video autoplay="autoplay" controls="controls" muted="muted" width="576" height="259" poster="https://cache.ruby-lang.org/pub/media/irb-reline-screenshot.png">
+  <source src="https://cache.ruby-lang.org/pub/media/irb_improved_with_key_take3.mp4" type="video/mp4" />
+</video>
+
+<h2>Compaction GC</h2>
+
+<p>This release introduces Compaction GC which can defragment
+a fragmented memory space.</p>
+
+<p>Some multi-threaded Ruby programs may cause memory fragmentation,
+leading to high memory usage and degraded speed.</p>
+
+<p>The <code>GC.compact</code> method is introduced for compacting the heap.
+This function compacts live objects in the heap so that fewer pages
+may be used, and the heap may be more CoW (copy-on-write) friendly.
+<a href="https://bugs.ruby-lang.org/issues/15626">[Feature #15626]</a></p>
+
+<h2>Separation of positional and keyword arguments</h2>
+
+<p>Automatic conversion of keyword arguments and positional arguments
+is deprecated, and conversion will be removed in Ruby 3.
+<a href="https://bugs.ruby-lang.org/issues/14183">[Feature #14183]</a></p>
+
+<p>See the article “<a href="https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/">Separation of positional and keyword arguments in Ruby 3.0</a>” in detail.
+Only the changes are as follows.</p>
+
+<ul>
+  <li>When a method call passes a Hash at the last argument, and when it
+passes no keywords, and when the called method accepts keywords,
+a warning is emitted.  To continue treating the hash as keywords,
+add a double splat operator to avoid the warning and ensure
+correct behavior in Ruby 3.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span>   <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">);</span>    <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span>   <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span> <span class="c1"># OK</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">);</span>    <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span> <span class="c1"># OK</span>
+  </code></pre></figure>
+
+<ul>
+  <li>When a method call passes keywords to a method that accepts keywords,
+but it does not pass enough required positional arguments, the
+keywords are treated as a final required positional argument, and
+a warning is emitted.  Pass the argument as a hash instead of keywords
+to avoid the warning and ensure correct behavior in Ruby 3.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="ss">key: </span><span class="mi">42</span><span class="p">)</span>      <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="ss">key: </span><span class="mi">42</span><span class="p">)</span>   <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span>    <span class="c1"># OK</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="ss">key: </span><span class="mi">42</span><span class="p">})</span> <span class="c1"># OK</span>
+  </code></pre></figure>
+
+<ul>
+  <li>When a method accepts specific keywords but not a keyword splat, and
+a hash or keywords splat is passed to the method that includes both
+Symbol and non-Symbol keys, the hash will continue to be split, and
+a warning will be emitted.  You will need to update the calling code
+to pass separate hashes to ensure correct behavior in Ruby 3.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="p">{},</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="s2">"key"</span> <span class="o">=&gt;</span> <span class="mi">43</span><span class="p">,</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">)</span>   <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="p">{},</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="s2">"key"</span> <span class="o">=&gt;</span> <span class="mi">43</span><span class="p">,</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">})</span> <span class="c1"># warned</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="p">{},</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="s2">"key"</span> <span class="o">=&gt;</span> <span class="mi">43</span><span class="p">},</span> <span class="ss">key: </span><span class="mi">42</span><span class="p">)</span> <span class="c1"># OK</span>
+  </code></pre></figure>
+
+<ul>
+  <li>If a method does not accept keywords, and is called with keywords,
+the keywords are still treated as a positional hash, with no warning.
+This behavior will continue to work in Ruby 3.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="p">{});</span>  <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span> <span class="ss">key: </span><span class="mi">42</span> <span class="p">)</span>   <span class="c1"># OK</span>
+  </code></pre></figure>
+
+<ul>
+  <li>Non-symbols are allowed as keyword argument keys if the method accepts
+arbitrary keywords.
+<a href="https://bugs.ruby-lang.org/issues/14183">[Feature #14183]</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">);</span> <span class="nb">p</span> <span class="n">kw</span><span class="p">;</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="s2">"str"</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">#=&gt; {"str"=&gt;1}</span>
+  </code></pre></figure>
+
+<ul>
+  <li><code>**nil</code> is allowed in method definitions to explicitly mark
+that the method accepts no keywords. Calling such a method with keywords
+will result in an ArgumentError.
+<a href="https://bugs.ruby-lang.org/issues/14183">[Feature #14183]</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="kp">nil</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="ss">key: </span><span class="mi">1</span><span class="p">)</span>       <span class="c1"># ArgumentError</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="kp">nil</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="ss">key: </span><span class="mi">1</span><span class="p">})</span>   <span class="c1"># ArgumentError</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="kp">nil</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="s2">"str"</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># ArgumentError</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="kp">nil</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="ss">key: </span><span class="mi">1</span><span class="p">})</span>     <span class="c1"># OK</span>
+  <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">**</span><span class="kp">nil</span><span class="p">);</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">({</span><span class="s2">"str"</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">})</span> <span class="c1"># OK</span>
+  </code></pre></figure>
+
+<ul>
+  <li>Passing an empty keyword splat to a method that does not accept keywords
+no longer passes an empty hash, unless the empty hash is necessary for
+a required parameter, in which case a warning will be emitted.
+Remove the double splat to continue passing a positional hash.
+<a href="https://bugs.ruby-lang.org/issues/14183">[Feature #14183]</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="n">h</span> <span class="o">=</span> <span class="p">{};</span> <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="o">**</span><span class="n">h</span><span class="p">)</span> <span class="c1"># []</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="p">{};</span> <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="o">**</span><span class="n">h</span><span class="p">)</span>  <span class="c1"># {} and warning</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="p">{};</span> <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>   <span class="c1"># [{}]</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="p">{};</span> <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="k">end</span><span class="p">;</span> <span class="n">foo</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>    <span class="c1"># {}</span>
+  </code></pre></figure>
+
+<p>If you want to disable the deprecation warnings, please use a command-line argument <code>-W:no-deprecated</code> or add <code>Warning[:deprecated] = false</code> to your code.</p>
+
+<h2>Other Notable New Features</h2>
+
+<ul>
+  <li>
+    <p>Numbered parameters as default block parameters are introduced.
+<a href="https://bugs.ruby-lang.org/issues/4475">[Feature #4475]</a></p>
+  </li>
+  <li>
+    <p>A beginless range is experimentally introduced.  It might not be
+as useful as an endless range, but would be good for DSL purposes.
+<a href="https://bugs.ruby-lang.org/issues/14799">[Feature #14799]</a></p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="n">ary</span><span class="p">[</span><span class="o">..</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># identical to ary[0..3]</span>
+  <span class="n">rel</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="ss">sales: </span><span class="o">..</span><span class="mi">100</span><span class="p">)</span>
+  </code></pre></figure>
+
+<ul>
+  <li><code>Enumerable#tally</code> is added.  It counts the occurrence of each element.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">].</span><span class="nf">tally</span>
+  <span class="c1">#=&gt; {"a"=&gt;1, "b"=&gt;2, "c"=&gt;1}</span>
+  </code></pre></figure>
+
+<ul>
+  <li>Calling a private method with a literal <code>self</code> as the receiver
+is now allowed.
+<a href="https://bugs.ruby-lang.org/issues/11297">[Feature #11297]</a>,
+<a href="https://bugs.ruby-lang.org/issues/16123">[Feature #16123]</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="k">def</span> <span class="nf">foo</span>
+  <span class="k">end</span>
+  <span class="kp">private</span> <span class="ss">:foo</span>
+  <span class="nb">self</span><span class="p">.</span><span class="nf">foo</span>
+  </code></pre></figure>
+
+<ul>
+  <li><code>Enumerator::Lazy#eager</code> is added.
+It generates a non-lazy enumerator from a lazy enumerator.
+<a href="https://bugs.ruby-lang.org/issues/15901">[Feature #15901]</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  <span class="n">a</span> <span class="o">=</span> <span class="sx">%w(foo bar baz)</span>
+  <span class="n">e</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="nf">lazy</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="p">.</span><span class="nf">upcase</span> <span class="p">}.</span><span class="nf">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">"!"</span> <span class="p">}.</span><span class="nf">eager</span>
+  <span class="nb">p</span> <span class="n">e</span><span class="p">.</span><span class="nf">class</span>               <span class="c1">#=&gt; Enumerator</span>
+  <span class="nb">p</span> <span class="n">e</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">"?"</span> <span class="p">}</span>  <span class="c1">#=&gt; ["FOO!?", "BAR!?", "BAZ!?"]</span>
+  </code></pre></figure>
+
+<h2>Performance improvements</h2>
+
+<ul>
+  <li>
+    <p>JIT [Experimental]</p>
+
+    <ul>
+      <li>
+        <p>JIT-ed code is recompiled to less-optimized code when an
+optimization assumption is invalidated.</p>
+      </li>
+      <li>
+        <p>Method inlining is performed when a method is considered as pure.
+This optimization is still experimental and many methods are
+NOT considered as pure yet.</p>
+      </li>
+      <li>
+        <p>The default value of <code>--jit-min-calls</code> is changed from 5 to 10,000.</p>
+      </li>
+      <li>
+        <p>The default value of <code>--jit-max-cache</code> is changed from 1,000 to 100.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Fiber’s cache strategy is changed and fiber creation is speeded up.
+<a href="https://github.com/ruby/ruby/pull/2224">GH-2224</a></p>
+  </li>
+  <li>
+    <p><code>Module#name</code>, <code>true.to_s</code>, <code>false.to_s</code>,
+and <code>nil.to_s</code> now always return a frozen String.
+The returned String is always the same for a given object.
+[Experimental]
+<a href="https://bugs.ruby-lang.org/issues/16150">[Feature #16150]</a></p>
+  </li>
+  <li>
+    <p>The performance of <code>CGI.escapeHTML</code> is improved.
+<a href="https://github.com/ruby/ruby/pull/2226">GH-2226</a></p>
+  </li>
+  <li>
+    <p>The performance of Monitor and MonitorMixin is improved.
+<a href="https://bugs.ruby-lang.org/issues/16255">[Feature #16255]</a></p>
+  </li>
+  <li>
+    <p>Per-call-site method cache, which has been there since around 1.9, was
+improved: cache hit rate raised from 89% to 94%.
+See <a href="https://github.com/ruby/ruby/pull/2583">GH-2583</a></p>
+  </li>
+  <li>
+    <p>RubyVM::InstructionSequence#to_binary method generates compiled binary. The binary size is reduced. [Feature #16163]</p>
+  </li>
+</ul>
+
+<h2>Other notable changes since 2.6</h2>
+
+<ul>
+  <li>Some standard libraries are updated.
+    <ul>
+      <li>Bundler 2.1.2
+(<a href="https://github.com/bundler/bundler/releases/tag/v2.1.2">Release note</a>)</li>
+      <li>RubyGems 3.1.2
+        <ul>
+          <li>(<a href="https://github.com/rubygems/rubygems/releases/tag/v3.1.0">Release note for 3.1.0</a>)</li>
+          <li>(<a href="https://github.com/rubygems/rubygems/releases/tag/v3.1.1">Release note for 3.1.1</a>)</li>
+          <li>(<a href="https://github.com/rubygems/rubygems/releases/tag/v3.1.2">Release note for 3.1.2</a>)</li>
+        </ul>
+      </li>
+      <li>Racc 1.4.15</li>
+      <li>CSV 3.1.2
+(<a href="https://github.com/ruby/csv/blob/v3.1.2/NEWS.md">NEWS</a>)</li>
+      <li>REXML 3.2.3
+(<a href="https://github.com/ruby/rexml/blob/v3.2.3/NEWS.md">NEWS</a>)</li>
+      <li>RSS 0.2.8
+(<a href="https://github.com/ruby/rss/blob/v0.2.8/NEWS.md">NEWS</a>)</li>
+      <li>StringScanner 1.0.3</li>
+      <li>Some other libraries that have no original version are also updated.</li>
+    </ul>
+  </li>
+  <li>The following libraries are no longer bundled gems.
+Install corresponding gems to use these features.
+    <ul>
+      <li>CMath (cmath gem)</li>
+      <li>Scanf (scanf gem)</li>
+      <li>Shell (shell gem)</li>
+      <li>Synchronizer (sync gem)</li>
+      <li>ThreadsWait (thwait gem)</li>
+      <li>E2MM (e2mmap gem)</li>
+    </ul>
+  </li>
+  <li>
+    <p><code>profile.rb</code> was removed from standard library.</p>
+  </li>
+  <li>Promote stdlib to default gems
+    <ul>
+      <li>The following default gems were published on rubygems.org
+        <ul>
+          <li>benchmark</li>
+          <li>cgi</li>
+          <li>delegate</li>
+          <li>getoptlong</li>
+          <li>net-pop</li>
+          <li>net-smtp</li>
+          <li>open3</li>
+          <li>pstore</li>
+          <li>singleton</li>
+        </ul>
+      </li>
+      <li>The following default gems were only promoted at ruby-core,
+but not yet published on rubygems.org.
+        <ul>
+          <li>monitor</li>
+          <li>observer</li>
+          <li>timeout</li>
+          <li>tracer</li>
+          <li>uri</li>
+          <li>yaml</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><code>Proc.new</code> and <code>proc</code> with no block in a method called with a block
+ is warned now.</p>
+  </li>
+  <li>
+    <p><code>lambda</code> with no block in a method called with a block raises an exception.</p>
+  </li>
+  <li>
+    <p>Update Unicode version and Emoji version from 11.0.0 to 12.0.0.
+<a href="https://bugs.ruby-lang.org/issues/15321">[Feature #15321]</a></p>
+  </li>
+  <li>
+    <p>Update Unicode version to 12.1.0,
+adding support for U+32FF SQUARE ERA NAME REIWA.
+<a href="https://bugs.ruby-lang.org/issues/15195">[Feature #15195]</a></p>
+  </li>
+  <li>
+    <p><code>Date.jisx0301</code>, <code>Date#jisx0301</code>, and <code>Date.parse</code> support the
+new Japanese era.
+<a href="https://bugs.ruby-lang.org/issues/15742">[Feature #15742]</a></p>
+  </li>
+  <li>Require compilers to support C99.
+<a href="https://bugs.ruby-lang.org/issues/15347">[Misc #15347]</a>
+    <ul>
+      <li>Details of our dialect:
+<a href="https://bugs.ruby-lang.org/projects/ruby-master/wiki/C99">https://bugs.ruby-lang.org/projects/ruby-master/wiki/C99</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>See <a href="https://github.com/ruby/ruby/blob/v2_7_0/NEWS">NEWS</a>
+or <a href="https://github.com/ruby/ruby/compare/v2_6_0...v2_7_0">commit logs</a>
+for more details.</p>
+
+<p>With those changes, <a href="https://github.com/ruby/ruby/compare/v2_6_0...v2_7_0">4190 files changed, 227498 insertions(+), 99979 deletions(-)</a>
+since Ruby 2.6.0!</p>
+
+<p>Merry Christmas, Happy Holidays, and enjoy programming with Ruby 2.7!</p>
+
+<h2>Download</h2>
+
+<ul>
+  <li>
+    <p><a href="https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.bz2">https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.bz2</a></p>
+
+    <pre><code>SIZE: 14703381
+SHA1: b54f4633174dbc55db77d9fd6d0ef90cc35503af
+SHA256: 7aa247a19622a803bdd29fdb28108de9798abe841254fe8ea82c31d125c6ab26
+SHA512: 8b8dd0ceba65bdde53b7c59e6a84bc6bf634c676bfeb2ff0b3604c362c663b465397f31ff6c936441b3daabb78fb7a619be5569480c95f113dd0453488761ce7
+</code></pre>
+  </li>
+  <li>
+    <p><a href="https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.gz">https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.gz</a></p>
+
+    <pre><code>SIZE: 16799684
+SHA1: 6f4e99b5556010cb27e236873cb8c09eb8317cd5
+SHA256: 8c99aa93b5e2f1bc8437d1bbbefd27b13e7694025331f77245d0c068ef1f8cbe
+SHA512: 973fc29b7c19e96c5299817d00fbdd6176319468abfca61c12b5e177b0fb0d31174a5a5525985122a7a356091a709f41b332454094940362322d1f42b77c9927
+</code></pre>
+  </li>
+  <li>
+    <p><a href="https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.xz">https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.xz</a></p>
+
+    <pre><code>SIZE: 11990900
+SHA1: 943c767cec037529b8e2d3cc14fc880cad5bad8d
+SHA256: 27d350a52a02b53034ca0794efe518667d558f152656c2baaf08f3d0c8b02343
+SHA512: dd5690c631bf3a2b76cdc06902bcd76a89713a045e136debab9b8a81ff8c433bbb254aa09e4014ca1cf85a69ff4bcb13de11da5e40c224e7268be43ef2194af7
+</code></pre>
+  </li>
+  <li>
+    <p><a href="https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.zip">https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.zip</a></p>
+
+    <pre><code>SIZE: 20571744
+SHA1: fbebdd3a2a641f9a81f7d8db5abd926acea27e80
+SHA256: 8bf2050fa1fc76882f878fd526e4184dc54bd402e385efa80ef5fd3b810522e0
+SHA512: 5060f2dd3bfd271ef255b17589d6d014260d7ec2d97b48112b717ee01c62fe125c3fe04f813e02d607cea3f0a2a812b14eb3a28d06c2551354dfeff5f4c3dd6b
+</code></pre>
+  </li>
+</ul>
+
+<h2>What is Ruby</h2>
+
+<p>Ruby was first developed by Matz (Yukihiro Matsumoto) in 1993,
+and is now developed as Open Source. It runs on multiple platforms
+and is used all over the world especially for web development.</p>
+
+<p>Posted by naruse on 25 Dec 2019</p>

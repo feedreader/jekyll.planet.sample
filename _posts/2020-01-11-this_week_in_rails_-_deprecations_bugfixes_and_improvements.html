@@ -1,0 +1,35 @@
+---
+title:      "This week in Rails - Deprecations, bugfixes and improvements!"
+created_at: 2020-01-11 00:00:00 UTC
+author:     Ruby on Rails Blog
+layout:     post
+original_link: "https://weblog.rubyonrails.org/2020/1/11/this-week-in-rails-deprecations-bugfixes-and-improvements/"
+---
+<p>Hello, this is <a href="https://twitter.com/gregmolnar">Greg</a>, bringing you the latest news from the Ruby on Rails world!</p>
+
+<h3 id="38-contributors-to-rails-in-past-week"><a href="https://contributors.rubyonrails.org/contributors/in-time-window/20190101-20191231">38 contributors to Rails in past week</a></h3>
+
+<p>There have been 38 contributors to Rails in the first week of the year! </p>
+
+<h3 id="deprecate-primary-as-a-connection_specification_name-for-activerecordbase"><a href="https://github.com/rails/rails/pull/38190">Deprecate “primary” as a connection_specification_name for ActiveRecord::Base</a></h3>
+
+<p>This PR deprecates the use of the name “primary” as the
+<em>connection_specification_name</em> for <em>ActiveRecord::Base</em> in favor of
+using “ActiveRecord::Base” to avoid confusion as earlier the classname was used in any other case.</p>
+
+<h3 id="deprecate-using-rangeinclude-to-check-the-inclusion-of-a-value-in-a-date-time-range"><a href="https://github.com/rails/rails/pull/38186">Deprecate using <code class="language-plaintext highlighter-rouge">Range#include?</code> to check the inclusion of a value in a date time range</a></h3>
+
+<p>The usage of the <em>Range#include?</em> method to check the inclusion of an argument in date-time with zone range is deprecated in Ruby and since Rails extends it, the deprecation needs to be carried forward.
+As a replacement, it is recommended to use <em>Range#cover?</em></p>
+
+<h3 id="restore-previous-behavior-of-parallel-test-databases"><a href="https://github.com/rails/rails/pull/38179">Restore previous behavior of parallel test databases</a></h3>
+
+<p>Before this bugfix, if an app called <em>establish_connection</em> with no arguments or doesn’t call
+<em>connects_to</em> in <em>ApplicationRecord</em> and uses parallel testing
+databases, the application could’ve picked up the wrong configuration.</p>
+
+<h3 id="reduce-number-of-created-objects-in-hashas_json"><a href="https://github.com/rails/rails/pull/38197">Reduce number of created objects in Hash#as_json</a></h3>
+
+<p>The improvement is highly coupled to the size of the hash but can be quite a bit for medium sized nested hashes.</p>
+
+<p>That’s it for this week, till next time! </p>

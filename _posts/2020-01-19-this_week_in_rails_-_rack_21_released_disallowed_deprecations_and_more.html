@@ -1,0 +1,32 @@
+---
+title:      "This week in Rails - Rack 2.1 released, disallowed deprecations, and more!"
+created_at: 2020-01-19 00:00:00 UTC
+author:     Ruby on Rails Blog
+layout:     post
+original_link: "https://weblog.rubyonrails.org/2020/1/19/this-week-in-rails-rack-2-1-released-disallowed-deprecations-and-more/"
+---
+<p>Hello, this is <a href="https://twitter.com/andrewmcodes">Andrew</a>, bringing you the latest news from the Ruby on Rails world!</p>
+
+<h3 id="18-contributors-to-rails-in-past-week"><a href="https://contributors.rubyonrails.org/contributors/in-time-window/20200112-20200118">18 contributors to Rails in past week</a></h3>
+
+<p>There have been 18 contributors to Rails in the second full week of 2020! </p>
+
+<h3 id="rack-210-and-211-released"><a href="https://github.com/rack/rack/releases/tag/2.1.1">Rack 2.1.0 and 2.1.1 released</a></h3>
+
+<p>These releases add support for the SameSite=None cookie value, new HTTP status codes, bug fixes, and several other exciting changes and additions. Updates to Rails following the release have also begun.</p>
+
+<p>Check out the <a href="https://github.com/rack/rack/blob/master/CHANGELOG.md">Rack changelog</a> to learn more.</p>
+
+<h3 id="introduce-active-support-disallowed-deprecations"><a href="https://github.com/rails/rails/pull/37940">Introduce Active Support Disallowed Deprecations</a></h3>
+
+<p>This addition allows the configuration of rules to match deprecation warnings that should not be allowed and <em>ActiveSupport::Deprecation#disallowed_behavior</em>, which specifies the behavior to be used when a disallowed deprecation warning is matched.</p>
+
+<h3 id="stop-individual-action-cable-streams"><a href="https://github.com/rails/rails/pull/37171">Stop individual Action Cable streams</a></h3>
+
+<p>Channels with multiple subscriptions can now stop following individual streams. Before this change, the only option was to stop all streams.</p>
+
+<h3 id="remove-an-empty-line-from-generated-migration"><a href="https://github.com/rails/rails/pull/38231">Remove an empty line from generated migration</a></h3>
+
+<p>This fix prevents an extra newline from getting added in generated migrations.</p>
+
+<p>That’s it for this week, till next time! </p>
