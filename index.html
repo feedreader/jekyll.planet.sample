@@ -15,14 +15,17 @@ that (auto-)adds articles & blog posts to your (static) website via feeds (and p
 
 <article class="post">
 
-  <header class="post-header">
+ <details>
+  <summary><header class="post-header">
     <p class="post-meta">{{ post.date | date: "%b %-d, %Y" }} • {{ post.author }}</p>
     <a class="post-link" href="{{ post.url | prepend: site.baseurl }}"><h1 class="post-title">{{ post.title | escape }}</h1></a>
   </header>
+  </summary
 
   <div class="post-content">
     {{ post.content }}
   </div>
+  </details>
 </article>
 
 {% endfor %}
